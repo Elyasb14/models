@@ -3,4 +3,9 @@ MODELS
 Models I've implemented in tinygrad:
 
 - mnist.py: this is the most basic of all neural networks; an mnist trainer.
-- alexnet.py: tinygrad implementation of alexnet; the first large and deep nueral network trained on a GPU. 
+- alexnet.py: tinygrad implementation of alexnet; the first large and deep nueral network trained on a GPU.
+
+REFERENCES
+
+- https://arxiv.org/abs/1404.5997
+
