@@ -9,7 +9,8 @@ import numpy as np
 
 from tinygrad.helpers import ImageDType, argfix, make_pair, getenv, IMAGE, DEBUG, flatten, DType, dtypes, prod, all_int, round_up
 from tinygrad.lazy import LazyBuffer
-from tinygrad.ops import Device, LoadOps
+from tinygrad.ops import LoadOps
+from tinygrad.device import Device
 from tinygrad.shape.symbolic import sint
 from tinygrad.realize import run_schedule
 
@@ -750,8 +751,8 @@ class Tensor:
   def __gt__(self, x) -> Tensor: return mlops.Less.apply(*self._broadcasted(x, True))
   def __ge__(self, x) -> Tensor: return 1.0-(self<x)
   def __le__(self, x) -> Tensor: return 1.0-(self>x)
-  def __ne__(self, x) -> Tensor: return (self<x) + (self>x)   # type: ignore
-  def __eq__(self, x) -> Tensor: return 1.0-(self != x)       # type: ignore
+  def __ne__(self, x) -> Tensor: return (self<x) + (self>x)   # type: ignore[override]
+  def __eq__(self, x) -> Tensor: return 1.0-(self != x)       # type: ignore[override]
 
   # ***** functional nn ops *****
 

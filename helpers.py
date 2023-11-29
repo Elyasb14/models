@@ -38,6 +38,6 @@ def fetch_mnist(tensors=False):
   X_test = parse(fetch(f"{BASE_URL}t10k-images-idx3-ubyte.gz"))[0x10:].reshape((-1, 28*28)).astype(np.float32)
   Y_test = parse(fetch(f"{BASE_URL}t10k-labels-idx1-ubyte.gz"))[8:]
   if tensors: return Tensor(X_train).reshape(-1, 1, 28, 28), Tensor(Y_train), Tensor(X_test).reshape(-1, 1, 28, 28), Tensor(Y_test)
-  else: return X_train, Y_train, X_test, Y_test
+  else: return X_train, Y_train, X_test, Y_test.shape
 
-fetch_mnist()
+print(fetch_mnist(True))
