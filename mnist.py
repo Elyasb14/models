@@ -5,6 +5,7 @@ import numpy as np
 import os
 from tinygrad.nn.optim import SGD
 import matplotlib.pyplot as plt
+from typing import Tuple
 
 def plot_mnist(idx):
   data = TRAIN_IM[2].reshape(28,28)
@@ -19,7 +20,7 @@ def sparse_categorical_crossentropy(self, Y, ignore_index=-1) -> Tensor:
     y = ((y_counter == Y.flatten().reshape(-1, 1)).where(-1.0, 0) * loss_mask.reshape(-1, 1)).reshape(*Y.shape, self.shape[-1])
     return self.log_softmax().mul(y).sum() / loss_mask.sum()
 
-def load_mnist() -> tuple(np.ndarray):
+def load_mnist() -> Tuple[np.ndarray]:
   # anon function that takes in bytes and loads them into 1d numpy array
   parse = lambda file: np.frombuffer(file, dtype=np.uint8).copy()
   data_dir = sorted(os.listdir("data"))
