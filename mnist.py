@@ -43,7 +43,7 @@ class TinyNet:
     x = self.l2(x)
     return x
   
-def run():
+def train():
   net = TinyNet() 
   opt = SGD(get_parameters(net), lr=3e-4) # can also do SGD([net.l1.weight, net.l2.weight], lr=3e-4)
   with Tensor.train():
@@ -72,4 +72,4 @@ def run():
     print(f"Test Accuracy: {avg_acc/1000}")
 
 if __name__ == "__main__":
-  run()
+  train()

@@ -4,6 +4,6 @@ Models I've implemented in tinygrad:
 - alexnet.py: tinygrad implementation of alexnet; the first large and deep nueral network trained on a GPU.
 
 REFERENCES
-
+- https://github.com/tinygrad/tinygrad
 - https://arxiv.org/abs/1404.5997
 
