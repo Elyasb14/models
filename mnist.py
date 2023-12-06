@@ -2,11 +2,9 @@ from tinygrad.tensor import Tensor
 from tinygrad.helpers import dtypes, Timing
 from tinygrad.nn import Linear
 import numpy as np
-import os
 from tinygrad.nn.optim import SGD
-import matplotlib.pyplot as plt
-from typing import Tuple
 from tinygrad.nn.state import get_parameters
+from helpers import load_mnist
 
 def sparse_categorical_crossentropy(self, Y, ignore_index=-1) -> Tensor:
     loss_mask = Y != ignore_index
@@ -14,20 +12,6 @@ def sparse_categorical_crossentropy(self, Y, ignore_index=-1) -> Tensor:
     y = ((y_counter == Y.flatten().reshape(-1, 1)).where(-1.0, 0) * loss_mask.reshape(-1, 1)).reshape(*Y.shape, self.shape[-1])
     return self.log_softmax().mul(y).sum() / loss_mask.sum()
 
-def plot_mnist(idx):
-  data = TRAIN_IM[idx].reshape(28,28)
-  print(TRAIN_LAB[idx])
-  plt.imshow(data)
-  plt.savefig("plot")
-
-def load_mnist() -> Tuple[np.ndarray]:
-  parse = lambda file: np.frombuffer(file, dtype=np.uint8).copy() # gives 1d array of 64 random integers
-  data_dir = sorted(os.listdir("data"))
-  with open(f"data/{data_dir[0]}", "rb") as f: TEST_IM = parse(f.read())[0x10:].reshape((-1, 28*28)).astype(np.float32)
-  with open(f"data/{data_dir[1]}", "rb") as f: TEST_LAB = parse(f.read())[8:]
-  with open(f"data/{data_dir[2]}", "rb") as f: TRAIN_IM = parse(f.read())[0x10:].reshape((-1, 28*28)).astype(np.float32)
-  with open(f"data/{data_dir[3]}", "rb") as f: TRAIN_LAB = parse(f.read())[8:]
-  return TEST_IM, TEST_LAB, TRAIN_IM, TRAIN_LAB
 
 TEST_IM, TEST_LAB, TRAIN_IM, TRAIN_LAB = load_mnist()
 
