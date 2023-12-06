@@ -1,5 +1,3 @@
-MODELS
-
 Models I've implemented in tinygrad:
 
 - mnist.py: this is the most basic of all neural networks; an mnist trainer.
