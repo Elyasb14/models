@@ -14,11 +14,11 @@ def plot_mnist(idx):
   plt.savefig("plot")
 
 # TODO: implement this myself
-# def sparse_categorical_crossentropy(self, Y, ignore_index=-1) -> Tensor:
-#     loss_mask = Y != ignore_index
-#     y_counter = Tensor.arange(self.shape[-1], dtype=dtypes.int32, requires_grad=False, device=self.device).unsqueeze(0).expand(Y.numel(), self.shape[-1])
-#     y = ((y_counter == Y.flatten().reshape(-1, 1)).where(-1.0, 0) * loss_mask.reshape(-1, 1)).reshape(*Y.shape, self.shape[-1])
-#     return self.log_softmax().mul(y).sum() / loss_mask.sum()
+def sparse_categorical_crossentropy(self, Y, ignore_index=-1) -> Tensor:
+    loss_mask = Y != ignore_index
+    y_counter = Tensor.arange(self.shape[-1], dtype=dtypes.int32, requires_grad=False, device=self.device).unsqueeze(0).expand(Y.numel(), self.shape[-1])
+    y = ((y_counter == Y.flatten().reshape(-1, 1)).where(-1.0, 0) * loss_mask.reshape(-1, 1)).reshape(*Y.shape, self.shape[-1])
+    return self.log_softmax().mul(y).sum() / loss_mask.sum()
 
 def load_mnist() -> Tuple[np.ndarray]:
   parse = lambda file: np.frombuffer(file, dtype=np.uint8).copy() # gives 1d array of 64 random integers
