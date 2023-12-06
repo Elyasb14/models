@@ -51,9 +51,6 @@ def train():
       samp = np.random.randint(0, TRAIN_IM.shape[0], size=(64)) # gives 1d array of 64 random integers
       batch = Tensor(TRAIN_IM[samp], requires_grad=False)
       labels = Tensor(TRAIN_LAB[samp])
-      print(batch[0])
-      print(labels)
-
 
 if __name__ == "__main__":
   train()
