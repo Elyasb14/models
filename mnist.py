@@ -27,7 +27,7 @@ class TinyNet:
     x = self.l2(x)
     return x
   
-def train(steps: int):
+def train(steps=10):
   net = TinyNet() 
   opt = SGD(get_parameters(net), lr=3e-4) # can also do SGD([net.l1.weight, net.l2.weight], lr=3e-4)
   with Tensor.train():
@@ -65,4 +65,4 @@ def train(steps: int):
   plt.savefig("plot")
 
 if __name__ == "__main__":
-  train(1000)
+  train(steps=1000)
