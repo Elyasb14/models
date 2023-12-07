@@ -54,15 +54,19 @@ def train(steps=10):
       pred = out.argmax(axis=-1).numpy()
       avg_acc += (pred == labels).mean()
     print(f"Test Accuracy: {avg_acc/1000}")
-  # state_dict = get_state_dict(net)
-  # safe_save(state_dict, "model.safetensors")
-  # load_state_dict(net, state_dict)
-  example = batch[1]
-  example_label = labels[1]
-  prediction = net(example).argmax(axis=-1)
-  print(example_label, prediction.numpy())
-  plt.imshow(example.numpy().reshape((28,28)))
-  plt.savefig("plot")
+  state_dict = get_state_dict(net)
+  safe_save(state_dict, "model.safetensors")
 
+def evaluate():
+  net = safe_load("model.safetensors")
+  print(net)
+  # example = TEST_IM[1]
+  # example_label = TEST_LAB[1]
+  # prediction = net(example).argmax(axis=-1)
+  # print(example_label, prediction.numpy())
+  # plt.imshow(example.numpy().reshape((28,28)))
+  # plt.savefig("plot")
+  
 if __name__ == "__main__":
-  train(steps=1000)
+  # train(steps=1000)
+  evaluate()
