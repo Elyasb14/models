@@ -68,5 +68,5 @@ def evaluate():
   # plt.savefig("plot")
   
 if __name__ == "__main__":
-  # train(steps=1000)
-  evaluate()
+  train(steps=1000)
+  # evaluate()

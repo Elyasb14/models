@@ -7,3 +7,7 @@ REFERENCES
 - https://github.com/tinygrad/tinygrad
 - https://arxiv.org/abs/1404.5997
 
+TODO
+- refactor mnist.py to be able to use the fashion mnist dataset
+- refactor mnist.py to be able to run an evaluation from model.safetensors
+
