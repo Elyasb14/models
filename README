@@ -12,4 +12,4 @@ TODO
 - implement inferencing in using model.safetensors inside mnist.py
 - implement training and inference inside better_mnist.py
 - implement alexnet
-- implement some nlp
+- implement a simple nlp model

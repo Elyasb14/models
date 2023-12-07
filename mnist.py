@@ -1,11 +1,12 @@
-from tinygrad.tensor import Tensor
 from tinygrad.helpers import dtypes, Timing
+from tinygrad.tensor import Tensor
 from tinygrad.nn import Linear
 import numpy as np
 from tinygrad.nn.optim import SGD
 from tinygrad.nn.state import get_parameters, safe_save, safe_load, get_state_dict, load_state_dict
 from helpers import load_mnist, plot_mnist
 import matplotlib.pyplot as plt
+from random import randint
 
 def sparse_categorical_crossentropy(self, Y, ignore_index=-1) -> Tensor:
     loss_mask = Y != ignore_index
@@ -17,7 +18,6 @@ TEST_IM, TEST_LAB, TRAIN_IM, TRAIN_LAB = load_mnist()
 
 class TinyNet:
   def __init__(self):
-    # l1 outfeatures == l2 in features
     self.l1 = Linear(784, 128, bias=False)
     self.l2 = Linear(128, 10, bias=False)
   
@@ -57,16 +57,18 @@ def train(steps=10):
   state_dict = get_state_dict(net)
   safe_save(state_dict, "model.safetensors")
 
-def evaluate():
-  net = safe_load("model.safetensors")
-  print(net)
-  # example = TEST_IM[1]
-  # example_label = TEST_LAB[1]
-  # prediction = net(example).argmax(axis=-1)
-  # print(example_label, prediction.numpy())
-  # plt.imshow(example.numpy().reshape((28,28)))
-  # plt.savefig("plot")
+def inference():
+  index = randint(0, TEST_IM.shape[0])
+  model = TinyNet()
+  state_dict = safe_load("model.safetensors")
+  load_state_dict(model, state_dict) # this updates the models internal state_dict, holding information about the current weights
+  example = Tensor(TEST_IM[index], requires_grad=False)
+  example_label = TEST_LAB[index]
+  prediction = model(example).argmax(axis=-1).numpy()
+  print(f"actual label: {example_label}, guess: {prediction}")
+  plt.imshow(example.numpy().reshape((28,28)))
+  plt.savefig("plot")
   
 if __name__ == "__main__":
-  train(steps=1000)
-  # evaluate()
+  # train(steps=1000)
+  inference()
