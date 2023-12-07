@@ -8,8 +8,8 @@ REFERENCES
 - https://arxiv.org/abs/1404.5997
 
 TODO
-- refactor mnist.py to be able to use the fashion mnist dataset
-- implement inferencing in using model.safetensors inside mnist.py
-- implement training and inference inside better_mnist.py
-- implement alexnet
-- implement a simple nlp model
+[ ] refactor mnist.py to be able to use the fashion mnist dataset
+[x] implement inferencing using model.safetensors inside mnist.py
+[ ] implement training and inference inside better_mnist.py
+[ ] implement alexnet
+[ ] implement a simple nlp model
