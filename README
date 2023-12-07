@@ -9,5 +9,7 @@ REFERENCES
 
 TODO
 - refactor mnist.py to be able to use the fashion mnist dataset
-- refactor mnist.py to be able to run an evaluation from model.safetensors
-
+- implement inferencing in using model.safetensors inside mnist.py
+- implement training and inference inside better_mnist.py
+- implement alexnet
+- implement some nlp
