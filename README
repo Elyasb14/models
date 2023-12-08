@@ -8,9 +8,11 @@ REFERENCES
 - https://arxiv.org/abs/1404.5997
 
 TODO
-[ ] refactor mnist.py to be able to use the fashion mnist dataset
+[x] refactor mnist.py to be able to use the fashion mnist dataset
 [x] implement inferencing using model.safetensors inside mnist.py
+[ ] refactor mnist.py to train above 95% on fashion mnist
 [ ] implement training and inference inside better_mnist.py
 [ ] implement alexnet
 [ ] implement a simple nlp model
 [ ] implement loss function plotting
+[ ] make data downloaders for both mnist and fashionmnist so users don't have to save the files

@@ -4,7 +4,7 @@ from tinygrad.nn import Linear
 import numpy as np
 from tinygrad.nn.optim import SGD
 from tinygrad.nn.state import get_parameters, safe_save, safe_load, get_state_dict, load_state_dict
-from helpers import load_mnist, plot_mnist
+from helpers import load_fashion, plot_mnist
 import matplotlib.pyplot as plt
 from random import randint
 
@@ -14,7 +14,7 @@ def sparse_categorical_crossentropy(self, Y, ignore_index=-1) -> Tensor:
     y = ((y_counter == Y.flatten().reshape(-1, 1)).where(-1.0, 0) * loss_mask.reshape(-1, 1)).reshape(*Y.shape, self.shape[-1])
     return self.log_softmax().mul(y).sum() / loss_mask.sum()
 
-TEST_IM, TEST_LAB, TRAIN_IM, TRAIN_LAB = load_mnist()
+TEST_IM, TEST_LAB, TRAIN_IM, TRAIN_LAB = load_fashion()
 
 class TinyNet:
   def __init__(self):
