@@ -13,3 +13,4 @@ TODO
 [ ] implement training and inference inside better_mnist.py
 [ ] implement alexnet
 [ ] implement a simple nlp model
+[ ] implement loss function plotting
