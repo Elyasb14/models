@@ -1,10 +1,21 @@
-MODELS
-
 Models I've implemented in tinygrad:
 
 - mnist.py: this is the most basic of all neural networks; an mnist trainer.
-- alexnet.py: tinygrad implementation of alexnet; the first large and deep nueral network trained on a GPU.
+- better_mnist.py: this is an improved version of mnist, stolen from the tinygrad repo
 
 REFERENCES
-
+- https://github.com/tinygrad/tinygrad
 - https://arxiv.org/abs/1404.5997
+<<<<<<< HEAD
+=======
+
+TODO
+[x] refactor mnist.py to be able to use the fashion mnist dataset
+[x] implement inferencing using model.safetensors inside mnist.py
+[x] implement loss function plotting
+[ ] refactor mnist.py to train above 95% on fashion mnist
+[ ] implement training and inference inside better_mnist.py
+[ ] implement alexnet
+[ ] implement a simple nlp model
+[ ] make data downloaders for both mnist and fashionmnist so users don't have to save the files
+>>>>>>> b091c2a936d74d273373fab353149f00eadc51bc
