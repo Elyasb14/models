@@ -2,8 +2,10 @@ from tinygrad.helpers import dtypes, Timing
 from tinygrad.tensor import Tensor
 from tinygrad.nn import Linear
 import numpy as np
+from typing import List, Callable
 from tinygrad.nn.optim import SGD
 from tinygrad.nn.state import get_parameters, safe_save, safe_load, get_state_dict, load_state_dict
+from tinygrad.nn import Conv2d
 from helpers import load_fashion, load_mnist
 import matplotlib.pyplot as plt
 from random import randint
@@ -18,8 +20,10 @@ TEST_IM, TEST_LAB, TRAIN_IM, TRAIN_LAB = load_mnist()
 
 class TinyNet:
   def __init__(self):
-    self.l1 = Linear(784, 128, bias=False)
-    self.l2 = Linear(128, 10, bias=False)
+    self.layers: List[Callable[[Tensor], Tensor]] =  
+    # self.l1 = Linear(784, 128, bias=False)
+    # self.l2 = Linear(128, 10, bias=False)
+
 
   def __call__(self, x: Tensor) -> Tensor:
     x = self.l1(x)
@@ -79,4 +83,4 @@ def inference():
 
 if __name__ == "__main__":
   train(steps=1000)
-  inference()
+  # inference()
