@@ -20,10 +20,8 @@ TEST_IM, TEST_LAB, TRAIN_IM, TRAIN_LAB = load_mnist()
 
 class TinyNet:
   def __init__(self):
-    self.layers: List[Callable[[Tensor], Tensor]] =  
-    # self.l1 = Linear(784, 128, bias=False)
-    # self.l2 = Linear(128, 10, bias=False)
-
+    self.l1 = Linear(784, 128, bias=False)
+    self.l2 = Linear(128, 10, bias=False)
 
   def __call__(self, x: Tensor) -> Tensor:
     x = self.l1(x)
@@ -32,7 +30,7 @@ class TinyNet:
     return x
 
 def train(steps=10):
-  net = TinyNet() 
+  net = TinyNet()
   opt = SGD(get_parameters(net), lr=3e-4) # can also do SGD([net.l1.weight, net.l2.weight], lr=3e-4)
   loss_list =[]
   with Tensor.train():

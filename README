@@ -1,5 +1,9 @@
 Models implemented in tinygrad
 
+ADVICE I LIKE
+
+- This is all you need to do for training: define our neural network, define our loss function, and then call .backward() on the loss function to compute the gradient. the gradients can then be used to update the parameters of our neural network using an optimizer
+
 TODO
 [x] refactor mnist.py to be able to use the fashion mnist dataset
 [x] implement inferencing using model.safetensors inside mnist.py
