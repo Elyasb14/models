@@ -1,11 +1,7 @@
 from helpers import load_mnist
 from tinygrad.tensor import Tensor
 from tinygrad.helpers import dtypes
-from tinygrad.nn.optim import SGD
 from tinygrad.nn import Linear
-from tinygrad.nn.state import get_parameters
-import numpy as np
-from tinygrad.jit import TinyJit
 
 TEST_IM, TEST_LAB, TRAIN_IM, TRAIN_LAB = load_mnist()
 

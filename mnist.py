@@ -65,7 +65,6 @@ def train(steps=10):
   plt.title("loss/step")
   plt.savefig("loss")
 
-
 def inference():
   index = randint(0, TEST_IM.shape[0])
   model = TinyNet()
