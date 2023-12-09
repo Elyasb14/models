@@ -2,13 +2,12 @@ from tinygrad.helpers import dtypes, Timing
 from tinygrad.tensor import Tensor
 from tinygrad.nn import Linear
 import numpy as np
-from typing import List, Callable
 from tinygrad.nn.optim import SGD
 from tinygrad.nn.state import get_parameters, safe_save, safe_load, get_state_dict, load_state_dict
-from tinygrad.nn import Conv2d
-from helpers import load_fashion, load_mnist
+from helpers import load_mnist
 import matplotlib.pyplot as plt
 from random import randint
+import sys
 
 def sparse_categorical_crossentropy(self, Y, ignore_index=-1) -> Tensor:
     loss_mask = Y != ignore_index
@@ -80,5 +79,9 @@ def inference():
   plt.savefig("plot")
 
 if __name__ == "__main__":
-  train(steps=1000)
-  # inference()
+  if sys.argv[1] == "train":
+    train(steps=1000)
+  elif sys.argv[1] == "inference":
+    inference()
+  else:
+    print(f"invalid command: {sys.argv[1]}")

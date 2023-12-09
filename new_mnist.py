@@ -24,23 +24,4 @@ class TinyNet:
     x = self.l1(x)
     x = x.leakyrelu()
     x = self.l2(x)
-    return x
-
-def train(steps: int):
-  model = TinyNet()
-  opt = SGD(get_parameters(model), lr=3e-4)
-  for step in range(steps):
-    with Tensor.train():
-      samp = np.random.randint(0, TRAIN_IM.shape[0], size=(64))
-      batch = Tensor(TRAIN_IM[samp], requires_grad=False); labels = Tensor(TRAIN_LAB[samp], requires_grad=False)  # noqa: F841, E702
-      out = model(batch)
-      loss = sparse_categorical_crossentropy(out, labels)
-      opt.zero_grad()
-      loss.backward()
-      opt.step()
-      if step % 100 == 0:
-        print(loss.numpy())
-
-if __name__ == "__main__":
-  train(1000)
 
