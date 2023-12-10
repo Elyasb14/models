@@ -16,7 +16,7 @@ def plot_loss(losses: list[float]) -> None:
   plt.xlabel("steps")
   plt.ylabel("loss")
   plt.title("loss/step")
-  plt.savefig("loss")
+  plt.savefig("plots/loss")
 
 def load_fashion(tensors=False) -> Tuple[np.ndarray]:
   def parse(file): return np.frombuffer(file, dtype=np.uint8).copy() # gives 1d array of 64 random integers

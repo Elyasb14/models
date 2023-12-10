@@ -1,86 +1,65 @@
-from tinygrad.helpers import dtypes, Timing
+from helpers import load_mnist, plot_loss
 from tinygrad.tensor import Tensor
 from tinygrad.nn import Linear
-import numpy as np
 from tinygrad.nn.optim import SGD
-from tinygrad.nn.state import get_parameters, safe_save, safe_load, get_state_dict, load_state_dict
-from helpers import load_mnist
-import matplotlib.pyplot as plt
+from tinygrad.nn.state import get_parameters, get_state_dict, safe_save, safe_load, load_state_dict
 from random import randint
-import sys
+from tinygrad.jit import TinyJit
+from tqdm import trange
+from sys import argv
 
-def sparse_categorical_crossentropy(self, Y, ignore_index=-1) -> Tensor:
-    loss_mask = Y != ignore_index
-    y_counter = Tensor.arange(self.shape[-1], dtype=dtypes.int32, requires_grad=False, device=self.device).unsqueeze(0).expand(Y.numel(), self.shape[-1])
-    y = ((y_counter == Y.flatten().reshape(-1, 1)).where(-1.0, 0) * loss_mask.reshape(-1, 1)).reshape(*Y.shape, self.shape[-1])
-    return self.log_softmax().mul(y).sum() / loss_mask.sum()
-
-TEST_IM, TEST_LAB, TRAIN_IM, TRAIN_LAB = load_mnist()
+TEST_IM, TEST_LAB, TRAIN_IM, TRAIN_LAB = load_mnist(tensors=False)
 
 class TinyNet:
   def __init__(self):
-    self.l1 = Linear(784, 128, bias=False)
-    self.l2 = Linear(128, 10, bias=False)
+    self.layers = [
+      Linear(784, 128, bias=False),
+      Tensor.leakyrelu,
+      Linear(128, 10, bias=False)
+      ]
 
-  def __call__(self, x: Tensor) -> Tensor:
-    x = self.l1(x)
-    x = x.leakyrelu()
-    x = self.l2(x)
-    return x
+  def __call__(self, x: Tensor) -> Tensor: return x.sequential(self.layers)
 
-def train(steps=10):
-  net = TinyNet()
-  opt = SGD(get_parameters(net), lr=3e-4) # can also do SGD([net.l1.weight, net.l2.weight], lr=3e-4)
-  loss_list =[]
+model = TinyNet()
+opt = SGD(get_parameters(model), lr=3e-4)
+
+@TinyJit
+def train(steps):
+  loss_list = []
   with Tensor.train():
-    for step in range(steps):
-      samp = np.random.randint(0, TRAIN_IM.shape[0], size=(64))
-      batch = Tensor(TRAIN_IM[samp], requires_grad=False) # grad is false because we don't need to compute gradients on these tensors
-      labels = Tensor(TRAIN_LAB[samp], requires_grad=False)
-      out = net(batch) # forward pass
-      loss = sparse_categorical_crossentropy(out, labels) # TODO: it would be nice to implement this myself, i don't really know what is going on here tbh 
+    for i in (t:=trange(steps)):
+      samp = [randint(0, TRAIN_IM.shape[0]-1) for _ in range(64)]
+      batch, batch_labels = Tensor(TRAIN_IM[samp], requires_grad=False), Tensor(TRAIN_LAB[samp], requires_grad=False)
       opt.zero_grad()
-      loss.backward() # can only be called on scalar tensors, loss must give a scalar tensor
-      opt.step() # this updates the parameters
-      pred = out.argmax(axis=-1) # this basically return the model's prediction 
-      acc = (pred == labels).mean() # i'm having a really hard time understanding what's going on here
+      loss = model(batch).sparse_categorical_crossentropy(batch_labels).backward()
+      opt.step()
       loss_list.append(loss)
-      if step % 100 == 0:
-        print(f"Step {step+1} | Loss: {loss.numpy()} | Accuracy: {acc.numpy() * 100}") # prints step, loss, and accuracy
-  with Timing("Time: "):
-    avg_acc = 0
-    for step in range(steps):
-      samp = np.random.randint(0, TEST_IM.shape[0], size=(64))
-      batch = Tensor(TEST_IM[samp], requires_grad=False)
-      labels = TEST_LAB[samp]
-      out = net(batch)
-      pred = out.argmax(axis=-1).numpy()
-      avg_acc += (pred == labels).mean()
-    print(f"Test Accuracy: {avg_acc/steps}")
-  state_dict = get_state_dict(net)
-  safe_save(state_dict, "model.safetensors")
-  plt.plot([loss.numpy() for loss in loss_list])
-  plt.xlabel("steps")
-  plt.ylabel("loss")
-  plt.title("loss/step")
-  plt.savefig("loss")
+      if i % 100 == 0:
+        t.set_description(f"loss: {loss.item()}")
+  plot_loss(loss_list)
+  safe_save(get_state_dict(model), "models/mnist.safetensors")
 
+@TinyJit
+def evaluate(steps):
+  avg_acc = 0
+  for i in (t:=trange(steps)):
+    samp = [randint(0, TEST_IM.shape[0]-1) for _ in range(64)]
+    test_pred = model(Tensor(TEST_IM[samp], requires_grad=False)).argmax(axis=-1)
+    acc = (test_pred == Tensor(TEST_LAB[samp], requires_grad=False)).mean()*100
+    avg_acc += acc.item()
+    t.set_description(f"avg acc: {avg_acc/steps}%")
+
+@TinyJit
 def inference():
-  index = randint(0, TEST_IM.shape[0])
-  model = TinyNet()
-  state_dict = safe_load("model.safetensors")
-  load_state_dict(model, state_dict) # this updates the models internal state_dict, holding information about the current weights
-  example = Tensor(TEST_IM[index], requires_grad=False)
-  example_label = TEST_LAB[index]
-  prediction = model(example).argmax(axis=-1).numpy()
-  print(f"actual label: {example_label}, guess: {prediction}")
-  plt.imshow(example.numpy().reshape((28,28)))
-  plt.savefig("plot")
+  samp = randint(0, 1000)
+  weights = safe_load("models/mnist.safetensors")
+  load_state_dict(model, weights)
+  pred, label = model(Tensor(TEST_IM[samp])).argmax(axis=-1).item(), TEST_LAB[samp]
+  print(f"model's prediction: {pred}, actual label: {label}")
 
 if __name__ == "__main__":
-  if sys.argv[1] == "train":
-    train(steps=1000)
-  elif sys.argv[1] == "inference":
+  if argv[1] == "train":
+    train(1000)
+    evaluate(1000)
+  elif argv[1] == "infer" or "inference":
     inference()
-  else:
-    print(f"invalid command: {sys.argv[1]}")
