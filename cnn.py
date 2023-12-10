@@ -3,6 +3,7 @@ from tinygrad.nn import Conv2d, BatchNorm2d, Linear
 from tinygrad.nn.optim import Adam
 from tinygrad.nn.state import get_parameters, safe_save, get_state_dict, safe_load, load_state_dict
 from tinygrad import Tensor, GlobalCounters
+from tinygrad.helpers import Timing
 from tqdm import trange
 from tinygrad.jit import TinyJit
 
@@ -28,28 +29,30 @@ opt = Adam(get_parameters(model))
 @TinyJit
 def train(steps):
     losses = []
-    with Tensor.train():
-        for i in (t:=trange(steps)):
-            GlobalCounters.reset()
-            samp = Tensor.randint(512, high=TRAIN_IM.shape[0])
-            batch, labels = TRAIN_IM[samp], TRAIN_LAB[samp]
-            opt.zero_grad()
-            loss = model(batch).sparse_categorical_crossentropy(labels).backward()
-            opt.step()
-            t.set_description(f"loss: {loss.item():6.2f}")
-            losses.append(loss)
+    with Timing("time to train: "):
+        with Tensor.train():
+            for i in (t:=trange(steps)):
+                GlobalCounters.reset()
+                samp = Tensor.randint(512, high=TRAIN_IM.shape[0])
+                batch, labels = TRAIN_IM[samp], TRAIN_LAB[samp]
+                opt.zero_grad()
+                loss = model(batch).sparse_categorical_crossentropy(labels).backward()
+                opt.step()
+                t.set_description(f"loss: {loss.item():6.2f}")
+                losses.append(loss)
     safe_save(get_state_dict(model), "models/cnn.safetensors")
     plot_loss(losses)
 
 @TinyJit
 def evaluate(steps):
     avg_acc = 0
-    for i in (t:=trange(steps)):
-        samp = Tensor.randint(512, high=TEST_IM.shape[0])
-        test_pred, labels  = model(TEST_IM[samp]).argmax(axis=1), TEST_LAB[samp]
-        acc = (test_pred == labels).mean()*100
-        avg_acc += acc.item()
-        t.set_description(f"avg acc: {avg_acc/steps:5.2f}%")
+    with Timing("time to evaluate: "):
+        for i in (t:=trange(steps)):
+            samp = Tensor.randint(512, high=TEST_IM.shape[0])
+            test_pred, labels  = model(TEST_IM[samp]).argmax(axis=1), TEST_LAB[samp]
+            acc = (test_pred == labels).mean()*100
+            avg_acc += acc.item()
+            t.set_description(f"avg acc: {avg_acc/steps:5.2f}%")
 
 def inference():
     model, weights = CNN(), safe_load("models/cnn.safetensors")
@@ -59,5 +62,5 @@ def inference():
     print(f"model pred: {out.realize().item()}, actual label: {label.realize().item()}")
 
 if __name__ == "__main__":
-    train(200)
-    evaluate(200)
+    train(70)
+    evaluate(70)
