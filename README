@@ -2,6 +2,7 @@ Models implemented in tinygrad
 
 TODO
 [ ] translate a pytorch model into tinygrad
+[ ] implement training, inference, and evaluation in cnn.py
 [ ] implement alexnet
 [ ] implement a simple nlp model
 [ ] make data downloaders for both mnist and fashionmnist so users don't have to save the files

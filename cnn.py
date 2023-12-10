@@ -17,7 +17,8 @@ class CNN:
             Conv2d(32, 64, 3), Tensor.relu,
             Conv2d(64, 64, 3), Tensor.relu,
             BatchNorm2d(64), Tensor.max_pool2d,
-            lambda x: x.flatten(1), Linear(576, 10)]
+            lambda x: x.flatten(1), Linear(576, 10)
+        ]
 
     def __call__(self, x: Tensor) -> Tensor: return x.sequential(self.layers)
 
@@ -40,6 +41,16 @@ def train(steps):
     plot_loss(losses)
 
 @TinyJit
+def evaluate(steps):
+    avg_acc = 0
+    for i in (t:=trange(steps)):
+        samp = Tensor.randint(512, high=TEST_IM.shape[0])
+        test_pred, labels  = model(TEST_IM[samp]).argmax(axis=-1), TEST_LAB[samp]
+        acc = (test_pred == labels).mean()*100
+        avg_acc += acc.item()
+        t.set_description(f"avg acc: {avg_acc/steps}")
+
+@TinyJit
 def inference():
   samp = Tensor.randint(1, high=TRAIN_IM.shape[0])
   weights = safe_load("models/cnn.safetensors")
@@ -48,5 +59,6 @@ def inference():
   print(f"model's prediction: {pred}, actual label: {label}")
 
 if __name__ == "__main__":
-    train(1000)
+    # train(500)
+    # evaluate(500)
     inference()
