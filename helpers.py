@@ -36,5 +36,5 @@ def load_mnist(tensors=False) -> Tuple[np.ndarray]:
   with open(f"data/mnist/{data_dir[1]}", "rb") as f: TEST_LAB = parse(f.read())[8:]
   with open(f"data/mnist/{data_dir[2]}", "rb") as f: TRAIN_IM = parse(f.read())[0x10:].reshape((-1, 28*28)).astype(np.float32)
   with open(f"data/mnist/{data_dir[3]}", "rb") as f: TRAIN_LAB = parse(f.read())[8:]
-  if tensors: return Tensor(TEST_IM, requires_grad=False), Tensor(TEST_LAB, requires_grad=False), Tensor(TRAIN_IM, requires_grad=False), Tensor(TRAIN_LAB, requires_grad=False)   # noqa: E701
+  if tensors: return Tensor(TEST_IM, requires_grad=False).reshape(-1,1,28,28), Tensor(TEST_LAB, requires_grad=False), Tensor(TRAIN_IM, requires_grad=False).reshape(-1,1,28,28), Tensor(TRAIN_LAB, requires_grad=False)   # noqa: E701
   return TEST_IM, TEST_LAB, TRAIN_IM, TRAIN_LAB

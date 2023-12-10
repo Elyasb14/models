@@ -1,4 +1,4 @@
-from helpers import load_fashion, plot_loss
+from helpers import load_mnist, plot_loss, load_fashion
 from tinygrad.nn import Conv2d, BatchNorm2d, Linear
 from tinygrad.nn.optim import Adam
 from tinygrad.nn.state import get_parameters, safe_save, get_state_dict, safe_load, load_state_dict
@@ -6,7 +6,7 @@ from tinygrad import Tensor
 from tqdm import trange
 from tinygrad.jit import TinyJit
 
-TEST_IM, TEST_LAB, TRAIN_IM, TRAIN_LAB = load_fashion(tensors=True)
+TEST_IM, TEST_LAB, TRAIN_IM, TRAIN_LAB = load_mnist(tensors=True)
 
 class CNN:
     def __init__(self):
@@ -45,7 +45,7 @@ def evaluate(steps):
     avg_acc = 0
     for i in (t:=trange(steps)):
         samp = Tensor.randint(512, high=TEST_IM.shape[0])
-        test_pred, labels  = model(TEST_IM[samp]).argmax(axis=-1), TEST_LAB[samp]
+        test_pred, labels  = model(TEST_IM[samp]).argmax(axis=1), TEST_LAB[samp]
         acc = (test_pred == labels).mean()*100
         avg_acc += acc.item()
         t.set_description(f"avg acc: {avg_acc/steps}")
@@ -55,10 +55,10 @@ def inference():
   samp = Tensor.randint(1, high=TRAIN_IM.shape[0])
   weights = safe_load("models/cnn.safetensors")
   load_state_dict(model, weights)
-  pred, label = model(TEST_IM[samp]).argmax(axis=-1).item(), TEST_LAB[samp].item()
-  print(f"model's prediction: {pred}, actual label: {label}")
+  pred, label = model(TEST_IM[samp]).argmax(axis=1), TEST_LAB[samp]
+  print(f"model's prediction: {pred.numpy()}, actual label: {label.numpy()}")
 
 if __name__ == "__main__":
-    # train(500)
-    # evaluate(500)
+    # train(70)
+    # evaluate(70)
     inference()
