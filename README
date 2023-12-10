@@ -2,10 +2,10 @@ Models implemented in tinygrad
 
 TODO
 [ ] translate a pytorch model into tinygrad
-[x] implement training, inference, and evaluation in cnn.py
-[ ] implement a makemore https://github.com/karpathy/makemore
+[ ] implement some makemore models https://github.com/karpathy/makemore
 [ ] make data downloaders for both mnist and fashionmnist so users don't have to save the files
+[ ] train a cnn to train fashion mnist to over 95%
+[ ] get some onnx model and run it
 
 REFERENCES
 - https://github.com/tinygrad/tinygrad
-- https://arxiv.org/abs/1404.5997
