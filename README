@@ -1,11 +1,17 @@
-Models implemented in tinygrad
+# Models implemented in tinygrad
 
-TODO
+## TODO
+
 [ ] translate a pytorch model into tinygrad
 [ ] implement some makemore models https://github.com/karpathy/makemore
 [ ] make data downloaders for both mnist and fashionmnist so users don't have to save the files
 [ ] train a cnn to train fashion mnist to over 95%
 [ ] get some onnx model and run it
 
-REFERENCES
+## REFERENCES
+
 - https://github.com/tinygrad/tinygrad
+
+## LESSONS LEARNED
+
+- when training fashion mnist on cnn.py, simply raising the training steps doesn't really contribute to notably better model accuracy. the loss function may get driven down a lot, but this doesn't necessarily contribute to a better model.

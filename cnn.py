@@ -2,7 +2,7 @@ from helpers import plot_loss, load_fashion
 from tinygrad.nn import Conv2d, BatchNorm2d, Linear
 from tinygrad.nn.optim import Adam
 from tinygrad.nn.state import get_parameters, safe_save, get_state_dict, safe_load, load_state_dict
-from tinygrad import Tensor
+from tinygrad import Tensor, GlobalCounters
 from tqdm import trange
 from tinygrad.jit import TinyJit
 
@@ -30,6 +30,7 @@ def train(steps):
     losses = []
     with Tensor.train():
         for i in (t:=trange(steps)):
+            GlobalCounters.reset()
             samp = Tensor.randint(512, high=TRAIN_IM.shape[0])
             batch, labels = TRAIN_IM[samp], TRAIN_LAB[samp]
             opt.zero_grad()
@@ -58,6 +59,5 @@ def inference():
     print(f"model pred: {out.realize().item()}, actual label: {label.realize().item()}")
 
 if __name__ == "__main__":
-    train(500)
-    evaluate(500)
-    inference()
+    train(200)
+    evaluate(200)

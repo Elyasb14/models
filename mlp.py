@@ -37,7 +37,7 @@ def train(steps):
       if i % 100 == 0:
         t.set_description(f"loss: {loss.item()}")
   plot_loss(loss_list)
-  safe_save(get_state_dict(model), "models/mnist.safetensors")
+  safe_save(get_state_dict(model), "models/mlp.safetensors")
 
 @TinyJit
 def evaluate(steps):
