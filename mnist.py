@@ -1,4 +1,4 @@
-from helpers import load_mnist, plot_loss
+from helpers import load_fashion, plot_loss
 from tinygrad.tensor import Tensor
 from tinygrad.nn import Linear
 from tinygrad.nn.optim import SGD
@@ -8,7 +8,7 @@ from tinygrad.jit import TinyJit
 from tqdm import trange
 from sys import argv
 
-TEST_IM, TEST_LAB, TRAIN_IM, TRAIN_LAB = load_mnist(tensors=False)
+TEST_IM, TEST_LAB, TRAIN_IM, TRAIN_LAB = load_fashion(tensors=False)
 
 class TinyNet:
   def __init__(self):

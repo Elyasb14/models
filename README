@@ -1,14 +1,7 @@
 Models implemented in tinygrad
 
-ADVICE I LIKE
-
-- This is all you need to do for training: define our neural network, define our loss function, and then call .backward() on the loss function to compute the gradient. the gradients can then be used to update the parameters of our neural network using an optimizer
-
 TODO
-[x] refactor mnist.py to be able to use the fashion mnist dataset
-[x] implement inferencing using model.safetensors inside mnist.py
-[x] implement loss function plotting
-[ ] implement this model https://www.kaggle.com/code/pankajj/fashion-mnist-with-pytorch-93-accuracy
+[ ] translate a pytorch model into tinygrad
 [ ] implement alexnet
 [ ] implement a simple nlp model
 [ ] make data downloaders for both mnist and fashionmnist so users don't have to save the files
