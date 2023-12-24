@@ -1,14 +1,12 @@
-from helpers import plot_loss, load_mnist
+from helpers import plot_loss, load_mnist, load_fashion
 from tinygrad.nn import Conv2d, BatchNorm2d, Linear
 from tinygrad.nn.optim import Adam
 from tinygrad.nn.state import get_parameters, safe_save, get_state_dict, safe_load, load_state_dict
 from tinygrad import Tensor, GlobalCounters
 from tinygrad.helpers import Timing
 from tqdm import trange
-import sys
+import argparse
 from tinygrad.jit import TinyJit
-
-TEST_IM, TEST_LAB, TRAIN_IM, TRAIN_LAB = load_mnist(tensors=True)
 
 class CNN:
   def __init__(self):
@@ -63,10 +61,17 @@ def inference():
   print(f"model pred: {out.realize().item()}, actual label: {label.realize().item()}")
 
 if __name__ == "__main__":
-  if sys.argv[1] == "train":
+  parser = argparse.ArgumentParser(description="arguments for training/infering on fashion or regular mnist", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+  parser.add_argument("--dataset", type=str, required=True, help="choose between mnist and fashion mnist")
+  parser.add_argument("--train", action="store_true", help="to train or not to train")
+  parser.add_argument("--infer", action="store_true", help="infer on a random image from the test dataset")
+  args = parser.parse_args()
+  if args.dataset == "mnist":
+    TEST_IM, TEST_LAB, TRAIN_IM, TRAIN_LAB = load_mnist(tensors=True) 
+  elif args.dataset == "fashion":
+    TEST_IM, TEST_LAB, TRAIN_IM, TRAIN_LAB = load_fashion(tensors=True)
+  if args.train:
     train(70)
     evaluate(70)
-  elif sys.argv[1] == "infer" or sys.argv[1] == "inference":
+  elif args.infer:
     inference()
-  else:
-    print(f"{sys.argv[1]} is not a valid command")

@@ -1,4 +1,4 @@
-from helpers import load_fashion, plot_loss
+from helpers import load_fashion, load_mnist, plot_loss
 from tinygrad.tensor import Tensor
 from tinygrad.nn import Linear
 from tinygrad.nn.optim import SGD
@@ -6,9 +6,7 @@ from tinygrad.nn.state import get_parameters, get_state_dict, safe_save, safe_lo
 from random import randint
 from tinygrad.jit import TinyJit
 from tqdm import trange
-from sys import argv
-
-TEST_IM, TEST_LAB, TRAIN_IM, TRAIN_LAB = load_fashion(tensors=False)
+import argparse
 
 class TinyNet:
   def __init__(self):
@@ -52,14 +50,23 @@ def evaluate(steps):
 @TinyJit
 def inference():
   samp = randint(0, 1000)
-  weights = safe_load("models/mnist.safetensors")
+  weights = safe_load("models/mlp.safetensors")
   load_state_dict(model, weights)
   pred, label = model(Tensor(TEST_IM[samp])).argmax(axis=-1).item(), TEST_LAB[samp]
   print(f"model's prediction: {pred}, actual label: {label}")
 
 if __name__ == "__main__":
-  if argv[1] == "train":
+  parser = argparse.ArgumentParser(description="arguments for training/infering on fashion or regular mnist", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+  parser.add_argument("--dataset", type=str, required=True, help="choose between mnist and fashion mnist")
+  parser.add_argument("--train", action="store_true", help="to train or not to train")
+  parser.add_argument("--infer", action="store_true", help="infer on a random image from the test dataset")
+  args = parser.parse_args()
+  if args.dataset == "mnist":
+    TEST_IM, TEST_LAB, TRAIN_IM, TRAIN_LAB = load_mnist(tensors=False) 
+  elif args.dataset == "fashion":
+    TEST_IM, TEST_LAB, TRAIN_IM, TRAIN_LAB = load_fashion(tensors=False)
+  if args.train:
     train(1000)
     evaluate(1000)
-  elif argv[1] == "infer" or "inference":
+  elif args.infer:
     inference()

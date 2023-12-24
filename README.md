@@ -9,7 +9,7 @@ you can technically run these models directly on the cpu, but they will be painf
 ```bash
 git clone git@github.com:Elyasb14/models.git
 ./update_tinygrad.sh
-GPU=1 python3 mlp.py train
+GPU=1 python3 mlp.py --train --dataset mnist
 ```
 
 this will save the state of the model in `models/mlp.safetensors`. infer by running `GPU=1 python3 mlp.py infer`.
