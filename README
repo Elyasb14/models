@@ -1,16 +1,18 @@
 # Models implemented in tinygrad
 
+## MODELS
+
+- mlp.py: the most basic of all nns, an mlp. this trains mnist to around 93%, and fashion mnist to about 80%. it consists of 2 linear layers with a leakyrelu in between them. 
+
 ## TODO
 
-[ ] translate a pytorch model into tinygrad
-[ ] implement some makemore models https://github.com/karpathy/makemore
-[ ] make data downloaders for both mnist and fashionmnist so users don't have to save the files
-[ ] train a cnn to train fashion mnist to over 95%
+[ ] implement some makemore models <https://github.com/karpathy/makemore>
 [ ] get some onnx model and run it
+[ ] make data downloaders for both mnist and fashionmnist so users don't have to save the files
 
 ## REFERENCES
 
-- https://github.com/tinygrad/tinygrad
+- <https://github.com/tinygrad/tinygrad>
 
 ## LESSONS LEARNED
 
