@@ -28,7 +28,6 @@ def load_fashion(tensors=False) -> Tuple[np.ndarray]:
   if tensors: return Tensor(TRAIN_IM, requires_grad=False).reshape(-1, 1, 28, 28), Tensor(TRAIN_LAB, requires_grad=False), Tensor(TEST_IM, requires_grad=False).reshape(-1,1,28,28), Tensor(TEST_LAB, requires_grad=False)   # noqa: E701
   return TEST_IM, TEST_LAB, TRAIN_IM, TRAIN_LAB
 
-# TODO: why was it slower when I called this with tensors=True
 def load_mnist(tensors=False) -> Tuple[np.ndarray]:
   def parse(file): return np.frombuffer(file, dtype=np.uint8).copy() # gives 1d array of 64 random integers
   data_dir = sorted(os.listdir("data/mnist"))
