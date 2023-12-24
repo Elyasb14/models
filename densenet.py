@@ -6,8 +6,10 @@
 
 from tinygrad import Tensor 
 from tinygrad.nn import BatchNorm2d, Conv2d
-from typing import Any, List, Union
+from typing import Any, List, Union, Tuple
 from tinygrad.jit import TinyJit
+
+layers = {}
 
 class _DenseLayer:
   def __init__(
@@ -41,7 +43,7 @@ class _DenseLayer:
     return False
   
   # TODO: implement this fully
-  def call_checkpoint_bottleneck(self, input: List[Tensor]) -> Tensor:
+  def call_checkpoint_bottleneck(self, input: List[Tensor]) -> Tensor: # https://arxiv.org/pdf/1707.06990.pdf
     print("memory efficiency not implemented yet")
 
   def __call__(self, input: Tensor):
@@ -75,5 +77,56 @@ class _DenseBlock:
         drop_rate=drop_rate,
         memory_efficient=memory_efficient
       )
+    layers[f"denselayer{i+1}"] = layer
+  '''
+  def forward(self, init_features: Tensor) -> Tensor:
+        features = [init_features]
+        for name, layer in self.items():
+            new_features = layer(features)
+            features.append(new_features)
+        return torch.cat(features, 1)
+  '''
   def __call__(self, init_features: Tensor) -> Tensor:
-    
+    features = [init_features]
+    for name, layer in layers.items():
+      new_features = layer(features)
+      features.append(new_features)
+    return features.cat(1)
+  
+class _Transition:
+  def __init__(self, num_input_features: int, num_output_features: int) -> None:
+    self.norm = BatchNorm2d(num_input_features)
+    self.relu = Tensor.relu
+    self.conv = Conv2d(num_input_features, num_output_features, kernel_size=1, stride=1, bias=False)
+    self.pool = Tensor.avg_pool2d(kernel_size=2, stride=2)
+
+class DenseNet:
+  def __init__(
+    self,
+    growth_rate: int = 32,
+    block_config: Tuple[int, int, int, int] = (6, 12, 24, 16),
+    num_init_features: int = 64, # we probs need to change this
+    bn_size: int = 4,
+    drop_rate: float = 0,
+    num_classes: int = 1000, # i think we need to change this to 10 for mnist
+    memory_efficient: bool = False
+  ) -> None:
+    # first conv
+    self.features = Tensor.sequential(
+      Conv2d(3, num_init_features, kernel_size=7, stride=2, padding=3, bias=False), # i think in channels needs to be 1 not 3 for mnist
+      BatchNorm2d(num_init_features),
+      Tensor.relu,
+      Tensor.max_pool2d(kernel_size=3, stride=2, padding=1)
+    )
+
+    num_features = num_init_features
+    for i, num_layers in enumerate(block_config):
+      block = _DenseBlock(
+        num_layers=num_layers,
+        num_input_features=num_features,
+        bn_size = bn_size,
+        growth_rate=growth_rate,
+        drop_rate=drop_rate,
+        memory_efficient=memory_efficient
+      )
+      self.features.append(block)
