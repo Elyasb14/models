@@ -16,18 +16,13 @@ this will save the state of the model in `models/mlp.safetensors`. infer by runn
 
 ## MODELS
 
-mlp.py: the most basic of all nns, an mlp. this trains mnist to around 93%, and fashion mnist to about 80%. it consists of 2 linear layers with a leakyrelu in between them. 
-
-## TODO
-
-- [ ] implement some makemore models
-- [ ] get some onnx model and run it in pure tinygrad
-- [ ] make data downloaders for both mnist and fashionmnist 
+mlp.py: the most basic of all nns, an mlp. this trains mnist to around 93%, and fashion mnist to about 80%. it consists of 2 linear layers with a leakyrelu in between them.
 
 ## REFERENCES
 
 - [tinygrad](https://github.com/tinygrad/tinygrad)
 - [makemore](https://github.com/karpathy/makemore)
+- [densenet](https://arxiv.org/pdf/1608.06993.pdf)
 
 ## LESSONS LEARNED
 

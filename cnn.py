@@ -1,13 +1,14 @@
-from helpers import plot_loss, load_fashion
+from helpers import plot_loss, load_mnist
 from tinygrad.nn import Conv2d, BatchNorm2d, Linear
 from tinygrad.nn.optim import Adam
 from tinygrad.nn.state import get_parameters, safe_save, get_state_dict, safe_load, load_state_dict
 from tinygrad import Tensor, GlobalCounters
 from tinygrad.helpers import Timing
 from tqdm import trange
+import sys
 from tinygrad.jit import TinyJit
 
-TEST_IM, TEST_LAB, TRAIN_IM, TRAIN_LAB = load_fashion(tensors=True)
+TEST_IM, TEST_LAB, TRAIN_IM, TRAIN_LAB = load_mnist(tensors=True)
 
 class CNN:
   def __init__(self):
@@ -62,6 +63,10 @@ def inference():
   print(f"model pred: {out.realize().item()}, actual label: {label.realize().item()}")
 
 if __name__ == "__main__":
-  # train(70)
-  # evaluate(70)
-  inference()
+  if sys.argv[1] == "train":
+    train(70)
+    evaluate(70)
+  elif sys.argv[1] == "infer" or sys.argv[1] == "inference":
+    inference()
+  else:
+    print(f"{sys.argv[1]} is not a valid command")
