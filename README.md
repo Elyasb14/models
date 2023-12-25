@@ -1,8 +1,8 @@
 # Models implemented in tinygrad
 
-learning ml using [tinygrad](https://github.com/tinygrad/tinygrad).
+learning ml using [tinygrad](https://github.com/tinygrad/tinygrad) and [pytorch](https://github.com/pytorch/pytorch)
 
-## QUICKSTART
+## TINYGRAD QUICKSTART
 
 make sure you have tinygrad installed, and run the following to train mnist to around 98% using a cnn and the GPU [(opencl)](https://www.khronos.org/opencl/) backend.
 
@@ -16,3 +16,4 @@ this will save the state of the model in `models/mlp.safetensors`. infer by runn
 
 - [tinygrad](https://github.com/tinygrad/tinygrad)
 - [makemore](https://github.com/karpathy/makemore/tree/master)
+- [pytorch](https://github.com/pytorch/pytorch)
