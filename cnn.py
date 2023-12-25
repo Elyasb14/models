@@ -6,7 +6,6 @@ from tinygrad import Tensor, GlobalCounters
 from tinygrad.helpers import Timing
 from tqdm import trange
 import argparse
-from tinygrad.jit import TinyJit
 
 class CNN:
   def __init__(self):
@@ -25,7 +24,6 @@ class CNN:
 model = CNN()
 opt = Adam(get_parameters(model))
 
-@TinyJit
 def train(steps):
   losses = []
   with Timing("time to train: "):
@@ -42,7 +40,6 @@ def train(steps):
   safe_save(get_state_dict(model), "models/cnn.safetensors")
   plot_loss(losses)
 
-@TinyJit
 def evaluate(steps):
   avg_acc = 0
   with Timing("time to evaluate: "):
