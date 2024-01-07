@@ -2,7 +2,7 @@ from helpers import plot_loss, load_mnist, load_fashion
 from tinygrad.nn import Conv2d, BatchNorm2d, Linear
 from tinygrad.nn.optim import Adam
 from tinygrad.nn.state import get_parameters, safe_save, get_state_dict, safe_load, load_state_dict
-from tinygrad import Tensor, GlobalCounters
+from tinygrad.tensor import Tensor
 from tinygrad.helpers import Timing
 from tqdm import trange
 import argparse
@@ -29,7 +29,6 @@ def train(steps):
   with Timing("time to train: "):
     with Tensor.train():
       for i in (t:=trange(steps)):
-        GlobalCounters.reset()
         samp = Tensor.randint(512, high=TRAIN_IM.shape[0])
         batch, labels = TRAIN_IM[samp], TRAIN_LAB[samp]
         opt.zero_grad()

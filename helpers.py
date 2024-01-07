@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 from typing import Tuple
-from tinygrad import Tensor
+from tinygrad.tensor import Tensor
 
 def plot_mnist(idx):
     TEST_IM, TEST_LAB, TRAIN_IM, TRAIN_LAB = load_mnist()
