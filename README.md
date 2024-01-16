@@ -1,6 +1,6 @@
 # Models implemented in tinygrad
 
-learning ml using [tinygrad](https://github.com/tinygrad/tinygrad) and [pytorch](https://github.com/pytorch/pytorch)
+learning ml using [tinygrad](https://github.com/tinygrad/tinygrad) 
 
 ## TINYGRAD QUICKSTART
 
@@ -10,10 +10,14 @@ make sure you have tinygrad installed, and run the following to train mnist to a
 GPU=1 python3 cnn.py --train --dataset mnist
 ```
 
-this will save the state of the model in `models/mlp.safetensors`. infer by running `GPU=1 python3 mlp.py infer`.
+this will save the state of the model in `models/cnn.safetensors`. infer by running `GPU=1 python3 cnn.py --infer`.
 
 ## REFERENCES
 
 - [tinygrad](https://github.com/tinygrad/tinygrad)
 - [makemore](https://github.com/karpathy/makemore/tree/master)
-- [pytorch](https://github.com/pytorch/pytorch)
+
+## GOALS
+
+- implement all of the makemore models
+- implement a cnn that trains fashion mnist to over 98%
