@@ -7,7 +7,7 @@ from tinygrad.helpers import Timing
 from tqdm import trange
 import argparse
 
-class CNN:
+class Cnn:
   def __init__(self):
     self.layers = [
       Conv2d(1, 32, 5), Tensor.relu,
@@ -21,7 +21,7 @@ class CNN:
 
   def __call__(self, x: Tensor) -> Tensor: return x.sequential(self.layers)
 
-model = CNN()
+model = Cnn()
 opt = Adam(get_parameters(model))
 
 def train(steps):
@@ -50,7 +50,7 @@ def evaluate(steps):
       t.set_description(f"avg acc: {avg_acc/steps:5.2f}%")
 
 def inference():
-  model, weights = CNN(), safe_load("models/cnn.safetensors")
+  model, weights = Cnn(), safe_load("models/cnn.safetensors")
   sample = Tensor.randint(1, high=TEST_IM.shape[0])
   load_state_dict(model, weights)
   out, label = model(TEST_IM[sample]).argmax(axis=1), TEST_LAB[sample]
