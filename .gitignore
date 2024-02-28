@@ -1,4 +1,6 @@
 __pycache__
+models
+plots
 .vscode
 .DS_Store
 *.pyc
