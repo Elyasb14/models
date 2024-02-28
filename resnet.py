@@ -33,6 +33,9 @@ class BasicBlock:
     out += identity
     out = self.relu(out)
     return out
+  
+  def __call__(self, x: Tensor) -> Tensor:
+    return self.forward(x)
 
 if __name__ == "__main__":
   #basic = BasicBlock()
