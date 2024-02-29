@@ -76,16 +76,3 @@ class Bottleneck:
 if __name__ == "__main__":
   #basic = BasicBlock()
   weights = torch_load(fetch("https://download.pytorch.org/models/resnext50_32x4d-7cdf4587.pth")).items()
-
-
-
-
-
-
-
-
-
-
-
-
-
